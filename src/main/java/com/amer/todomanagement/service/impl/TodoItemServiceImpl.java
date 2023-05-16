@@ -19,16 +19,11 @@ import java.util.List;
 public class TodoItemServiceImpl implements TodoItemService {
     @Autowired
     private TodoRepo todoItemRepo;
-
     @Autowired
     private TaskRepo taskRepo;
     @Autowired
     private TaskService taskService;
 
-    @Autowired
-    public TodoItemServiceImpl(TodoRepo todoItemRepo) {
-        this.todoItemRepo = todoItemRepo;
-    }
 
     @Override
     public TodoItemDto createTodoItem(TodoItemDto todoItemDto) {

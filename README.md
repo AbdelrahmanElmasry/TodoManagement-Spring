@@ -38,7 +38,14 @@ Here is what this little application demonstrates:
 * Exception mapping from application exceptions to the right HTTP response with exception details in the body
 * *Spring Data* Integration with JPA/Hibernate with just a few lines of configuration and familiar annotations. 
 * Automatic CRUD functionality against the data source using Spring *Repository* pattern
+* Documentation for the API endpoints using openAPI and Swagger UI 
 
+
+### Swagger UI:
+Shows the list of endpoints in the current RESTful webservice.
+```
+HTTP GET http://localhost:8080/swagger-ui/index.html
+```
 Here are some endpoints you can call:
 
 ### Query Todos, Tasks resources:
