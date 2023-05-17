@@ -11,7 +11,6 @@ import com.amer.todomanagement.service.TaskService;
 import com.amer.todomanagement.service.TodoItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,26 +23,12 @@ public class TodoItemServiceImpl implements TodoItemService {
     @Autowired
     private TaskService taskService;
 
-
     @Override
     public TodoItemDto createTodoItem(TodoItemDto todoItemDto) {
-        Todo todoItem = new Todo();
-        todoItem.setName(todoItemDto.getName());
-        todoItem.setDescription(todoItemDto.getDescription());
-        List<TaskDto> todoTasks = todoItemDto.getTasks();
 
+        Todo todoItem = mapToEntity(todoItemDto);
         Todo newTodo = todoItemRepo.save(todoItem);
-        if (todoTasks.size() > 0) {
-            for (TaskDto task : todoTasks){
-               taskService.createTask(newTodo.getId(), task);
-            }
-        }
-
-        TodoItemDto todoItemResponse = new TodoItemDto();
-        todoItemResponse.setId(newTodo.getId());
-        todoItemResponse.setName(newTodo.getName());
-        todoItemResponse.setDescription(newTodo.getDescription());
-        todoItemResponse.setTasks(todoTasks);
+        TodoItemDto todoItemResponse = mapToDto(newTodo);
 
         return todoItemResponse;
     }
@@ -66,16 +51,26 @@ public class TodoItemServiceImpl implements TodoItemService {
         todoItemDto.setId(todo.getId());
         todoItemDto.setName(todo.getName());
         todoItemDto.setDescription(todo.getDescription());
+        List<Task> tasks = todo.getTasks();
+        List<TaskDto> tasksDto = new ArrayList<>();
+        for(Task task: tasks) {
+            tasksDto.add(taskService.mapToDto(task));
+        }
         return todoItemDto;
     }
 
-    public void deleteById(Long id) {
-        taskRepo.deleteById(id);
+    private Todo mapToEntity(TodoItemDto todoItemDto) {
+        Todo todo = new Todo();
 
-        List<TaskDto> tasksDto = taskService.getTasksByTodoId(id);
-
-        for (TaskDto task : tasksDto) {
-            taskRepo.deleteById(task.getId());
+        todo.setName(todoItemDto.getName());
+        todo.setDescription(todoItemDto.getDescription());
+        List<TaskDto> tasksDto = todoItemDto.getTasks();
+        for(TaskDto taskDto: tasksDto) {
+            Task task = taskService.mapToEntity(taskDto);
+            task.setTodoItem(todo);
+            todo.getTasks().add(task);
         }
+
+        return todo;
     }
 }

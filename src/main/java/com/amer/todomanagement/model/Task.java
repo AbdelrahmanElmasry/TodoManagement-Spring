@@ -3,11 +3,9 @@ package com.amer.todomanagement.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "task")
 public class Task {
@@ -20,20 +18,24 @@ public class Task {
     private String description;
 
     @JoinColumn(name="todo_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Todo todo;
 
-    public Task(String name, String description) {
+    public Task(Long id, String name, String description, Todo todo) {
+        this.id = id;
         this.name = name;
         this.description = description;
+        this.setTodoItem(todo);
     }
+
     public Todo getTodoItem() {
         return todo;
     }
 
     public void setTodoItem(Todo todoItem) {
         this.todo = todoItem;
+        this.todo.getTasks().add(this);
     }
 
     public Long getId() {

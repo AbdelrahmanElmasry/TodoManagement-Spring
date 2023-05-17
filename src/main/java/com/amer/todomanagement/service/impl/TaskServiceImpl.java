@@ -58,7 +58,8 @@ public class TaskServiceImpl implements TaskService {
         return mapToDto(task);
     }
 
-    private TaskDto mapToDto(Task task){
+    @Override
+     public TaskDto mapToDto(Task task){
         TaskDto taskDto = new TaskDto();
 
         taskDto.setId(task.getId());
@@ -67,10 +68,13 @@ public class TaskServiceImpl implements TaskService {
         return taskDto;
     }
 
-    private Task mapToEntity(TaskDto taskDto) {
+    @Override
+    public Task mapToEntity(TaskDto taskDto) {
         Task task = new Task();
 
-        task.setId(taskDto.getId());
+        if (taskDto.getId() > 0) {
+            task.setId(taskDto.getId());
+        }
         task.setName(taskDto.getName());
         task.setDescription(taskDto.getDescription());
 

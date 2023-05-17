@@ -85,7 +85,7 @@ public class TodoItemController {
             parameters = { @Parameter(name = "todoId", description = "Id of the todo item to be deleted", example = "1")}
     )
     public void delete(@PathVariable Long id) {
-        todoItemService.deleteById(id);
+        todoRepo.deleteById(id);
     }
 }
 

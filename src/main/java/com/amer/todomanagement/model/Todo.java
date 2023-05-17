@@ -17,7 +17,7 @@ import java.util.List;
 public class Todo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
     private String name;
@@ -25,11 +25,11 @@ public class Todo {
 
     @OneToMany(
             mappedBy = "todo",
-            cascade = CascadeType.ALL,
+            cascade = { CascadeType.MERGE, CascadeType.PERSIST},
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
     @JsonIgnore
-    private List<Task> tasks = new ArrayList<Task>();
+    private List<Task> tasks = new ArrayList<>();
 
 }
